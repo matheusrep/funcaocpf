@@ -153,6 +153,7 @@ namespace FI.AtividadeEntrevista.DAL
                     DML.Cliente cli = new DML.Cliente();
                     cli.Id = row.Field<long>("Id");
                     cli.CEP = row.Field<string>("CEP");
+                    cli.CPF = row.Field<string>("CPF");
                     cli.Cidade = row.Field<string>("Cidade");
                     cli.Email = row.Field<string>("Email");
                     cli.Estado = row.Field<string>("Estado");
@@ -160,7 +161,7 @@ namespace FI.AtividadeEntrevista.DAL
                     cli.Nacionalidade = row.Field<string>("Nacionalidade");
                     cli.Nome = row.Field<string>("Nome");
                     cli.Sobrenome = row.Field<string>("Sobrenome");
-                    cli.CPF = row.Field<string>("CPF");
+                  //  cli.CPF = row.Field<string>("CPF");
                     cli.Telefone = row.Field<string>("Telefone");
                     
                     lista.Add(cli);
