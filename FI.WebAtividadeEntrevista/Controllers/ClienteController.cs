@@ -158,8 +158,7 @@ namespace WebAtividadeEntrevista.Controllers
 
                 //Return result to jTable
                 return Json(new { Result = "OK", Records = clientes, TotalRecordCount = qtd });
-            } 
-            catch (Exception ex)
+            } catch (Exception ex)
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
