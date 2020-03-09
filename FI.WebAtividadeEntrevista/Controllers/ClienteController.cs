@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FI.AtividadeEntrevista.DML;
-using FI.AtividadeEntrevista.DAL; 
+
 
 namespace WebAtividadeEntrevista.Controllers
 {
@@ -27,8 +27,6 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Incluir(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-            
-
 
             if (!this.ModelState.IsValid)
             {
@@ -38,18 +36,19 @@ namespace WebAtividadeEntrevista.Controllers
 
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erros));
-            }
+            } 
             else
             {
 
-                
-                System.Diagnostics.Debug.WriteLine("CPF COM ERRO: " + model.CPF);
-                System.Diagnostics.Debug.WriteLine("CEP OK: " + model.CEP);
+                /* 
+                 System.Diagnostics.Debug.WriteLine("CPF COM ERRO: " + model.CPF);
+                 System.Diagnostics.Debug.WriteLine("CEP OK: " + model.CEP);
+               */
 
 
+                if (!bo.VerificarExistencia(model.CPF))
+                {
 
-                if (!bo.VerificarExistencia(model.CPF)){
-                    
                     model.Id = bo.Incluir(new Cliente()
                     {
                         Nome = model.Nome,
@@ -66,18 +65,20 @@ namespace WebAtividadeEntrevista.Controllers
 
                     return Json("Cadastro efetuado com sucesso");
 
-                } else
+                } 
+                else
                 {
-                   return Json("CPF Já Cadastrado!");
+                    return Json("CPF Já Cadastrado!");
                 }
             }
         }
+
 
         [HttpPost]
         public JsonResult Alterar(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-       
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -86,8 +87,7 @@ namespace WebAtividadeEntrevista.Controllers
 
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erros));
-            }
-            else
+            } else
             {
                 bo.Alterar(new Cliente()
                 {
@@ -103,7 +103,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone
                 });
-                               
+
                 return Json("Cadastro alterado com sucesso");
             }
         }
@@ -132,7 +132,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = cliente.Telefone
                 };
 
-            
+
             }
 
             return View(model);
@@ -158,7 +158,7 @@ namespace WebAtividadeEntrevista.Controllers
 
                 //Return result to jTable
                 return Json(new { Result = "OK", Records = clientes, TotalRecordCount = qtd });
-            }
+            } 
             catch (Exception ex)
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });

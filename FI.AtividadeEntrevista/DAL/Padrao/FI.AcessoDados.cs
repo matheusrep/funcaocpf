@@ -62,6 +62,7 @@ namespace FI.AtividadeEntrevista.DAL
             try
             {               
                 adapter.Fill(ds);
+           
             }
             finally
             {

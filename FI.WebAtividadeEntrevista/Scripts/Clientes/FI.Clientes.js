@@ -8,15 +8,16 @@ $(document).ready(function () {
             data: {
                 
                 "NOME": $(this).find("#Nome").val(),
-                "CEP": $(this).find("#CEP").val(),
-                "CPF": $(this).find("#CPF").val(),
-                "Email": $(this).find("#Email").val(),
                 "Sobrenome": $(this).find("#Sobrenome").val(),
+                "CPF": $(this).find("#CPF").val(),
+                "CEP": $(this).find("#CEP").val(),
+                "Email": $(this).find("#Email").val(),
                 "Nacionalidade": $(this).find("#Nacionalidade").val(),
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val()
+                
             },
             error:
             function (r) {
