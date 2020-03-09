@@ -36,8 +36,7 @@ namespace WebAtividadeEntrevista.Controllers
 
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erros));
-            } 
-            else
+            } else
             {
 
                 /* 
@@ -65,8 +64,7 @@ namespace WebAtividadeEntrevista.Controllers
 
                     return Json("Cadastro efetuado com sucesso");
 
-                } 
-                else
+                } else
                 {
                     return Json("CPF Já Cadastrado!");
                 }
@@ -89,22 +87,30 @@ namespace WebAtividadeEntrevista.Controllers
                 return Json(string.Join(Environment.NewLine, erros));
             } else
             {
-                bo.Alterar(new Cliente()
-                {
-                    CPF = model.CPF,
-                    Id = model.Id,
-                    CEP = model.CEP,
-                    Cidade = model.Cidade,
-                    Email = model.Email,
-                    Estado = model.Estado,
-                    Logradouro = model.Logradouro,
-                    Nacionalidade = model.Nacionalidade,
-                    Nome = model.Nome,
-                    Sobrenome = model.Sobrenome,
-                    Telefone = model.Telefone
-                });
 
-                return Json("Cadastro alterado com sucesso");
+                if (!bo.VerificarExistencia(model.CPF))
+                {
+
+                    bo.Alterar(new Cliente()
+                    {
+                        CPF = model.CPF,
+                        Id = model.Id,
+                        CEP = model.CEP,
+                        Cidade = model.Cidade,
+                        Email = model.Email,
+                        Estado = model.Estado,
+                        Logradouro = model.Logradouro,
+                        Nacionalidade = model.Nacionalidade,
+                        Nome = model.Nome,
+                        Sobrenome = model.Sobrenome,
+                        Telefone = model.Telefone
+                    });
+
+                    return Json("Cadastro alterado com sucesso");
+                } else
+                {
+                    return Json("CPF Já Cadastrado!");
+                }
             }
         }
 
