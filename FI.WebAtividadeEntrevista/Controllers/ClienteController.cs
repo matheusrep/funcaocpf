@@ -45,29 +45,40 @@ namespace WebAtividadeEntrevista.Controllers
                */
 
 
-                if (!bo.VerificarExistencia(model.CPF))
+
+                if (this.IsCpf(model.CPF))
                 {
 
-                    model.Id = bo.Incluir(new Cliente()
+                    if (!bo.VerificarExistencia(model.CPF))
                     {
-                        Nome = model.Nome,
-                        Sobrenome = model.Sobrenome,
-                        CPF = model.CPF,
-                        Nacionalidade = model.Nacionalidade,
-                        CEP = model.CEP,
-                        Estado = model.Estado,
-                        Cidade = model.Cidade,
-                        Logradouro = model.Logradouro,
-                        Email = model.Email,
-                        Telefone = model.Telefone
-                    });
 
-                    return Json("Cadastro efetuado com sucesso");
+                        model.Id = bo.Incluir(new Cliente()
+                        {
+                            Nome = model.Nome,
+                            Sobrenome = model.Sobrenome,
+                            CPF = model.CPF,
+                            Nacionalidade = model.Nacionalidade,
+                            CEP = model.CEP,
+                            Estado = model.Estado,
+                            Cidade = model.Cidade,
+                            Logradouro = model.Logradouro,
+                            Email = model.Email,
+                            Telefone = model.Telefone
+                        });
+
+                        return Json("Cadastro efetuado com sucesso");
+
+                    } else
+                    {
+                        return Json("CPF já está cadastrado!");
+                    }
 
                 } else
                 {
-                    return Json("CPF Já Cadastrado!");
+
+                    return Json("CPF inválido!");
                 }
+
             }
         }
 
@@ -87,30 +98,22 @@ namespace WebAtividadeEntrevista.Controllers
                 return Json(string.Join(Environment.NewLine, erros));
             } else
             {
-
-                if (!bo.VerificarExistencia(model.CPF))
+                bo.Alterar(new Cliente()
                 {
+                    CPF = model.CPF,
+                    Id = model.Id,
+                    CEP = model.CEP,
+                    Cidade = model.Cidade,
+                    Email = model.Email,
+                    Estado = model.Estado,
+                    Logradouro = model.Logradouro,
+                    Nacionalidade = model.Nacionalidade,
+                    Nome = model.Nome,
+                    Sobrenome = model.Sobrenome,
+                    Telefone = model.Telefone
+                });
 
-                    bo.Alterar(new Cliente()
-                    {
-                        CPF = model.CPF,
-                        Id = model.Id,
-                        CEP = model.CEP,
-                        Cidade = model.Cidade,
-                        Email = model.Email,
-                        Estado = model.Estado,
-                        Logradouro = model.Logradouro,
-                        Nacionalidade = model.Nacionalidade,
-                        Nome = model.Nome,
-                        Sobrenome = model.Sobrenome,
-                        Telefone = model.Telefone
-                    });
-
-                    return Json("Cadastro alterado com sucesso");
-                } else
-                {
-                    return Json("CPF Já Cadastrado!");
-                }
+                return Json("Cadastro alterado com sucesso");
             }
         }
 
@@ -168,6 +171,42 @@ namespace WebAtividadeEntrevista.Controllers
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
+        }
+
+        private bool IsCpf(string cpf)
+        {
+            int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            string tempCpf;
+            string digito;
+            int soma;
+            int resto;
+            cpf = cpf.Trim();
+            cpf = cpf.Replace(".", "").Replace("-", "");
+            if (cpf.Length != 11)
+                return false;
+            tempCpf = cpf.Substring(0, 9);
+            soma = 0;
+
+            for (int i = 0; i < 9; i++)
+                soma += int.Parse(tempCpf[i].ToString()) * multiplicador1[i];
+            resto = soma % 11;
+            if (resto < 2)
+                resto = 0;
+            else
+                resto = 11 - resto;
+            digito = resto.ToString();
+            tempCpf = tempCpf + digito;
+            soma = 0;
+            for (int i = 0; i < 10; i++)
+                soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
+            resto = soma % 11;
+            if (resto < 2)
+                resto = 0;
+            else
+                resto = 11 - resto;
+            digito = digito + resto.ToString();
+            return cpf.EndsWith(digito);
         }
     }
 }
